@@ -21,8 +21,6 @@
       <div class="search-bar">
         <!-- tab栏 -->
         <el-row type="flex" class="search-tab">
-          <!-- 绑定点击事件,每次点击自动切换 currentOption -->
-          <!-- 只需要判断 currentOption == index 那么就给一个 :class={} -->
           <span v-for="(item, index) in options" :key="index" @click="handleChengTag(index)">
             <i>{{ item.title }}</i>
           </span>
@@ -39,13 +37,10 @@
 
 <script>
 export default {
-  // 对于模板html的编写,和css 的样式,其实是最简单的
-  // 重点是数据结构的构造
   data () {
     return {
       banners: [],
       options: [
-        // 每一个对象都是一个标签
         {
           title: '攻略',
           placeholder: '搜索城市'
@@ -59,13 +54,11 @@ export default {
           placeholder: '请输入出发地'
         }
       ],
-      // 一旦有 tab 切换,第一个想的就是 current
       currentOption: 0
     }
   },
   mounted () {
-    // 挂载完毕的时候获取数据渲染轮播图
-    // nuxt 实际上已经将 axios 封装到了 vue 市里的 $axios 当中可以直接使用
+    // 获取数据渲染轮播图
     this.$axios({
       url: '/scenics/banners'
     }).then((res) => {
