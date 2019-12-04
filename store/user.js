@@ -28,8 +28,18 @@ export const actions = {
     }).then((res) => {
       const data = res.data
       // 保存到state
-      commit('setUserInfo', data)
+      // commit('setUserInfo', data)
       return data
+    })
+  },
+
+  register ({ commit }, props) {
+    return this.$axios({
+      url: `/accounts/register`,
+      method: 'POST',
+      data: props
+    }).then((res) => {
+      return res
     })
   }
 }

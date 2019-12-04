@@ -25,8 +25,8 @@ export default {
   data () {
     return {
       form: {
-        username: '',
-        password: ''
+        username: '13800138000',
+        password: '123456'
       },
       rules: {
         username: [
@@ -47,51 +47,18 @@ export default {
     }
   },
   methods: {
-    //     handleLoginSubmit () {
-    //       // 验证表单
-    //       this.$refs.form.validate(async (valid) => {
-    //         // 验证表单通过时发送请求
-    //         if (valid) {
-    //           const res = await this.$axios({
-    //             url: '/accounts/login',
-    //             method: 'POST',
-    //             data: this.form
-    //           })
-    //           // eslint-disable-next-line no-console
-    //           console.log(res.data)
-    //         } else {
-    //           // 验证不通过
-    //           // 给提示
-    //           this.$message.error('用户数据输入不合法')
-    //           // 中止本次请求
-    //           return false
-    //         }
-    //       })
-    //     }
     // 提交登录
     handleLoginSubmit () {
       // 验证表单
       this.$refs.form.validate((valid) => {
         // 为true表示没有错误
         if (valid) {
-          // 删除代码
-          // this.$axios({
-          //     url: "/accounts/login",
-          //     method: "POST",
-          //     data: this.form
-          // }).then(res => {
-          //     console.log(res.data);
-          // })
-
           // 新增代码
           this.$store.dispatch('user/login', this.form).then((res) => {
-            // 成功提示
-            this.$message({
-              message: '登录成功，正在跳转',
-              type: 'success'
-            })
+            this.$message.success('登录成功，正在跳转')
             // 跳转到首页
             setTimeout(() => {
+              this.$store.commit('user/setUserInfo', res)
               this.$router.replace('/')
             }, 1000)
           })
