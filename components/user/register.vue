@@ -126,8 +126,10 @@ export default {
           const { checkPassword, ...props } = this.form
           this.$store.dispatch('user/register', props).then((res) => {
             this.$message.success('注册成功，正在跳转')
-            this.form = {}
-            this.$emit('changcurrentTab')
+            setTimeout(() => {
+              this.form = {}
+              this.$emit('changcurrentTab')
+            }, 1000)
           })
         }
       })
