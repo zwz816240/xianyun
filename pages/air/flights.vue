@@ -12,6 +12,18 @@
         <!-- 航班信息 -->
         <div>
           <FlightsItem v-for="(item,index) in dataList" :key="index" :flight="item" />
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :page-sizes="[2,4,6,8]"
+            :page-size="pageSize"
+            :total="flightsData.flights.length"
+            v-if="dataList.length>0"
+            layout="total, sizes, prev, pager, next, jumper"
+          />
+          <div v-else-if="!loading">
+            本页暂无数据
+          </div>
         </div>
       </div>
 
@@ -35,8 +47,21 @@ export default {
   },
   data () {
     return {
-      flightsData: {}, // 航班总数据
-      dataList: [] // 航班列表数据，用于循环flightsItem组件，单独出来是因为要分页
+      loading: true,
+      flightsData: {
+        flights: []
+      }, // 航班总数据
+      // dataList: [], // 航班列表数据，用于循环flightsItem组件，单独出来是因为要分页
+      pageIndex: 1,
+      pageSize: 2
+    }
+  },
+  computed: {
+    dataList () {
+      const start = (this.pageIndex - 1) * this.pageSize
+      const end = start + this.pageSize
+      // 获取所有航班列表数据
+      return this.flightsData.flights.slice(start, end)
     }
   },
   mounted () {
@@ -45,9 +70,28 @@ export default {
       params: this.$route.query
     }).then((res) => {
       this.flightsData = res.data
-      this.dataList = this.flightsData.flights
-      // console.log( this.dataList)
+      this.loadPage()
+      this.loading = false
     })
+  },
+  methods: {
+    loadPage () {
+      const start = (this.pageIndex - 1) * this.pageSize
+      const end = start + this.pageSize
+      // 获取所有航班列表数据
+      this.dataList = this.flightsData.flights.slice(start, end)
+    },
+    // 改变每页显示数据条数是触发的函数
+    handleSizeChange (val) {
+      this.pageSize = val
+      this.loadPage()
+    },
+    // 改变页码是触发的函数
+    handleCurrentChange (val) {
+      // console.log(`当前页: ${val}`)
+      this.pageIndex = val
+      this.loadPage()
+    }
   }
 }
 </script>
